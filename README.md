@@ -20,9 +20,9 @@ Note: This was developed on a linux machine.
 
 ### Building, and Running
 
-The `ROOT_DIRECTORY` can be specified on each docker run. In order to deploy the docker image that will be hosting the restapi, you can run `script.py` with:
+The `ROOT_DIRECTORY` can be specified on each docker run. In order to deploy the docker image that will be hosting the restapi, you can run `startup_script.py` with:
  ```py
- ROOT_DIRECTORY=`{root_directory}` python3 script.py
+ ROOT_DIRECTORY=`{root_directory}` python3 startup_script.py
  ```
  IE:
  ```py
