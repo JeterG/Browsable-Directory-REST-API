@@ -28,7 +28,10 @@ The `ROOT_DIRECTORY` can be specified on each docker run. In order to deploy the
  ```py
 ROOT_DIRECTORY="/home/my_user/otherstuff/foo/" python3 script.py
  ```
- The result should then be the output of the image being built, the tests running and Uvicorn successfully running.
+ <details>
+ 
+ <summary>The result should then be the output of the image being built, the tests running and Uvicorn successfully running. </summary> 
+  
  ```py
  ROOT_DIRECTORY="/home/my_user/otherstuff/foo/" python3 script.py
 Sending build context to Docker daemon  129.3MB
@@ -102,13 +105,17 @@ INFO:     Started server process [7]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 ```
+ </details>
+
 ### Request Script
-Once the server is live and running on the docker image, can start making requests to the api, there is another scriopt with some requests that can be ran as well wit
+Once the server is live and running on the docker image, can start making requests to the api, there is another script with some requests that can be ran as well with:
 ```py
 python3 curling_script.py
 ```
 
-And Whose output is 
+<details>
+
+<summary>It will make the requests using curl and print the curl command and the json_content response</summary>
 ```py
 
 
@@ -306,3 +313,5 @@ COMMAND:  curl -s -X DELETE 127.0.0.1:8000/delete/new_directory
    "detail" : "deleted /home/my_user/otherstuff/foo/new_directory"
 }
 ```
+</details>
+
