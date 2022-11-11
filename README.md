@@ -1,5 +1,5 @@
 ## Browse file system Using RESTapi
-This is a RESTapi created using [FastAPI](https://fastapi.tiangolo.com/) because of it's handy Swagger documentation that helps to get things up and runnin smoothly and quikcly. Along with [Uvicorn](https://www.uvicorn.org/) as the server host.
+This is a RESTapi created using [FastAPI](https://fastapi.tiangolo.com/) because of it's handy Swagger documentation that helps to get things up and runnin smoothly and quickly. Along with [Uvicorn](https://www.uvicorn.org/) as the server host.
 In this api you can
 - Specify root directory on initial run
 - List files and diresctories along with their permissions, names, owners and size
@@ -101,4 +101,208 @@ INFO:     Started reloader process [1] using StatReload
 INFO:     Started server process [7]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+```
+### Request Script
+Once the server is live and running on the docker image, can start making requests to the api, there is another scriopt with some requests that can be ran as well wit
+```py
+python3 curling_script.py
+```
+
+And Whose output is 
+```py
+
+
+COMMAND:  curl -s 127.0.0.1:8000
+{
+   "Content" : [
+      {
+         "File_Name" : "foo2",
+         "Owner" : "root",
+         "Permissions" : "664",
+         "Size" : 29,
+         "Type" : "file"
+      },
+      {
+         "File_Name" : "foo1",
+         "Owner" : "root",
+         "Permissions" : "664",
+         "Size" : 29,
+         "Type" : "file"
+      },
+      {
+         "File_Name" : "bar",
+         "Owner" : "root",
+         "Permissions" : "775",
+         "Size" : 4096,
+         "Type" : "directory"
+      }
+   ],
+   "Count" : 3,
+   "ROOT_DIRECTORY" : "/home/my_user/otherstuff/foo/",
+   "_link" : "http://127.0.0.1:8000/"
+}
+
+
+COMMAND:  curl -s 127.0.0.1:8000/bar
+{
+   "Content" : [
+      {
+         "File_Name" : "bar1",
+         "Owner" : "root",
+         "Permissions" : "664",
+         "Size" : 30,
+         "Type" : "file"
+      },
+      {
+         "File_Name" : "baz",
+         "Owner" : "root",
+         "Permissions" : "775",
+         "Size" : 4096,
+         "Type" : "directory"
+      }
+   ],
+   "Count" : 2,
+   "ROOT_DIRECTORY" : "/home/my_user/otherstuff/foo/",
+   "_link" : "http://127.0.0.1:8000/bar/"
+}
+
+
+COMMAND:  curl -s 127.0.0.1:8000/foo1
+{
+   "Content" : [
+      {
+         "Data" : "Contents found in file foo1!\n",
+         "File_Name" : "foo1",
+         "Owner" : "root",
+         "Permissions" : "664",
+         "Size" : 29,
+         "Type" : "file"
+      }
+   ],
+   "Count" : 1,
+   "ROOT_DIRECTORY" : "/home/my_user/otherstuff/foo/",
+   "_link" : "http://127.0.0.1:8000/foo1/"
+}
+
+
+COMMAND:  curl -s 127.0.0.1:8000/bar/bar1
+{
+   "Content" : [
+      {
+         "Data" : "Contents found in file bar 1!\n",
+         "File_Name" : "bar1",
+         "Owner" : "root",
+         "Permissions" : "664",
+         "Size" : 30,
+         "Type" : "file"
+      }
+   ],
+   "Count" : 1,
+   "ROOT_DIRECTORY" : "/home/my_user/otherstuff/foo/",
+   "_link" : "http://127.0.0.1:8000/bar/bar1/"
+}
+
+
+COMMAND:  curl -s -X POST 127.0.0.1:8000/post/new_directory
+{
+   "_link" : "http://127.0.0.1:8000/post/new_directory",
+   "detail" : "Created directories /home/my_user/otherstuff/foo/new_directory"
+}
+
+
+COMMAND:  curl -s  -X POST '127.0.0.1:8000/post/new_directory/new_file.txt?file_or_directory=file&content=NEW%21%21'
+{
+   "_link" : "http://127.0.0.1:8000/post/new_directory/new_file.txt?file_or_directory=file&content=NEW%21%21",
+   "detail" : "Created file at /home/my_user/otherstuff/foo/new_directory/new_file.txt"
+}
+
+
+COMMAND:  curl -s  -X PUT '127.0.0.1:8000/put/new_directory/new_file.txt?file_or_directory=file&content=Continued!'
+{
+   "_link" : "http://127.0.0.1:8000/put/new_directory/new_file.txt?file_or_directory=file&content=Continued!",
+   "detail" : "Updated File /home/my_user/otherstuff/foo/new_directory/new_file.txt"
+}
+
+
+COMMAND:  curl -s 127.0.0.1:8000/new_directory/new_file.txt
+{
+   "Content" : [
+      {
+         "Data" : "NEW!!\nContinued!",
+         "File_Name" : "new_file.txt",
+         "Owner" : "root",
+         "Permissions" : "644",
+         "Size" : 16,
+         "Type" : "file"
+      }
+   ],
+   "Count" : 1,
+   "ROOT_DIRECTORY" : "/home/my_user/otherstuff/foo/",
+   "_link" : "http://127.0.0.1:8000/new_directory/new_file.txt/"
+}
+
+
+COMMAND:  curl -s  -X PUT '127.0.0.1:8000/put/new_directory/new_file.txt?file_or_directory=file&content=Overwritten!!&overwite=true'
+{
+   "_link" : "http://127.0.0.1:8000/put/new_directory/new_file.txt?file_or_directory=file&content=Overwritten!!&overwite=true",
+   "detail" : "Updated File /home/my_user/otherstuff/foo/new_directory/new_file.txt"
+}
+
+
+COMMAND:  curl -s 127.0.0.1:8000/new_directory/new_file.txt
+{
+   "Content" : [
+      {
+         "Data" : "Overwritten!!",
+         "File_Name" : "new_file.txt",
+         "Owner" : "root",
+         "Permissions" : "644",
+         "Size" : 13,
+         "Type" : "file"
+      }
+   ],
+   "Count" : 1,
+   "ROOT_DIRECTORY" : "/home/my_user/otherstuff/foo/",
+   "_link" : "http://127.0.0.1:8000/new_directory/new_file.txt/"
+}
+
+
+COMMAND:  curl -s 127.0.0.1:8000/new_directory
+{
+   "Content" : [
+      {
+         "File_Name" : "new_file.txt",
+         "Owner" : "root",
+         "Permissions" : "644",
+         "Size" : 13,
+         "Type" : "file"
+      }
+   ],
+   "Count" : 1,
+   "ROOT_DIRECTORY" : "/home/my_user/otherstuff/foo/",
+   "_link" : "http://127.0.0.1:8000/new_directory/"
+}
+
+
+COMMAND:  curl -s -X DELETE 127.0.0.1:8000/delete/new_directory/new_file.txt
+{
+   "_link" : "http://127.0.0.1:8000/delete/new_directory/new_file.txt",
+   "detail" : "deleted /home/my_user/otherstuff/foo/new_directory/new_file.txt"
+}
+
+
+COMMAND:  curl -s 127.0.0.1:8000/new_directory
+{
+   "Content" : [],
+   "Count" : 0,
+   "ROOT_DIRECTORY" : "/home/my_user/otherstuff/foo/",
+   "_link" : "http://127.0.0.1:8000/new_directory/"
+}
+
+
+COMMAND:  curl -s -X DELETE 127.0.0.1:8000/delete/new_directory
+{
+   "_link" : "http://127.0.0.1:8000/delete/new_directory",
+   "detail" : "deleted /home/my_user/otherstuff/foo/new_directory"
+}
 ```
