@@ -5,20 +5,29 @@ import app.schemas as schemas
 from pathlib import Path
 import os
 
-ROOT_DIRECTORY = os.environ.get("ROOT_DIRECTORY", str(Path().absolute())+"/")
-# ROOT_DIRECTORY = "/home/my_user/otherstuff/foo/"
-# ROOT_DIRECTORY = (
-#     "/home/jeterg/Documents/GitHub/RestAPI/data/home/my_user/otherstuff/foo/"
-# )
+ROOT_DIRECTORY = os.environ.get("ROOT_DIRECTORY", str(Path().absolute()) + "/")
 tools = helpers.Helper(ROOT_DIRECTORY)
 main_route = "/{specified_path:path}"
-tags_metadata = [{"name": main_route, "description": ""}]
+tags_metadata = [
+    {
+        "name": "default",
+        "description": "Browsable Directory RESTapi that can be used to list/create/update/delete files and directories!",
+    }
+]
 
 app = FastAPI(version="0.0.1", openapi_tags=tags_metadata)
 
 
-@app.get(main_route, status_code=200, responses={404: {"model": schemas.NotFound}})
+@app.get(
+    main_route,
+    status_code=200,
+    responses={
+        404: {"model": schemas.NotFound},
+        200: {"model": schemas.DirectoryContents},
+    },
+)
 def get_directory_or_file_contents(request: Request, specified_path: str = "/") -> dict:
+    """Get contents of a directory or file at the _specified_path_"""
     full_path = ROOT_DIRECTORY + specified_path
     if specified_path == "":
         specified_path = "/"
@@ -26,7 +35,7 @@ def get_directory_or_file_contents(request: Request, specified_path: str = "/") 
     if not url.endswith("/"):
         url = f"{url}/"
     base_json = {
-        "_link": url,
+        "link": url,
         "ROOT_DIRECTORY": ROOT_DIRECTORY,
     }
     if os.path.exists(full_path):
@@ -58,18 +67,22 @@ def get_directory_or_file_contents(request: Request, specified_path: str = "/") 
 @app.post(
     "/post" + main_route,
     status_code=200,
-    responses={400: {"model": schemas.BadRequest}},
+    responses={
+        400: {"model": schemas.BadRequest},
+        200: {"model": schemas.SuccessfulPost},
+    },
 )
 def create_file_or_directory(
     request: Request,
-    specified_path: str,
-    file_or_directory: str = "d",
-    content: str = "",
+    specified_path: str = "/",
+    file_or_directory: str = "directory",
+    content: str = " ",
 ) -> dict:
+    """Create new directories or files"""
     file_or_directory = file_or_directory.lower()
     full_path = ROOT_DIRECTORY + specified_path
     path = Path(full_path)
-    base_json = {"_link": str(request.url)}
+    base_json = {"link": str(request.url)}
     creating_file = file_or_directory in ["f", "file"]
     creating_directory = file_or_directory in ["d", "directory"]
     if not (creating_file or creating_directory):
@@ -97,14 +110,20 @@ def create_file_or_directory(
 
 
 @app.put(
-    "/put" + main_route, status_code=200, responses={400: {"model": schemas.BadRequest}}
+    "/put" + main_route,
+    status_code=200,
+    responses={
+        400: {"model": schemas.BadRequest},
+        200: {"model": schemas.SuccessfulPut},
+    },
 )
 def update_file(
     request: Request, specified_path: str, content: str = "", overwite: bool = False
 ) -> dict:
+    """Patch/Update Existing files"""
     full_path = ROOT_DIRECTORY + specified_path
     path = Path(full_path)
-    base_json = {"_link": str(request.url)}
+    base_json = {"link": str(request.url)}
     if not path.exists():
         raise HTTPException(
             status_code=400,
@@ -126,14 +145,17 @@ def update_file(
 @app.delete(
     "/delete" + main_route,
     status_code=200,
-    responses={400: {"model": schemas.BadRequest}},
+    responses={
+        400: {"model": schemas.BadRequest},
+        200: {"model": schemas.SuccessfulDelete},
+    },
 )
 def delete(request: Request, specified_path: str) -> dict:
+    """Delete directories or files"""
     full_path = ROOT_DIRECTORY + specified_path
-    base_json = {"_link": str(request.url)}
+    base_json = {"link": str(request.url)}
     if tools.delete_file_or_directory(full_path):
         return {"detail": f"deleted {full_path}", **base_json}
     return JSONResponse(
         status_code=400, content={"error": f"{full_path} does not exist.", **base_json}
     )
-

@@ -14,7 +14,7 @@ def test_main_route():
     print(json_resp)
     assert json_resp["Count"] == 1
     assert json_resp["Content"][0]["File_Name"] == "home"
-    assert json_resp["_link"] == "http://testserver/"
+    assert json_resp["link"] == "http://testserver/"
 
 
 def test_one_directory_deep():
@@ -23,14 +23,14 @@ def test_one_directory_deep():
     print(json_resp)
     assert json_resp["Count"] == 1
     assert json_resp["Content"][0]["File_Name"] == "my_user"
-    assert json_resp["_link"] == "http://testserver/home/"
+    assert json_resp["link"] == "http://testserver/home/"
 
 
 def test_several_directories_deep():
     response = test_client.get("/home/my_user/otherstuff/foo")
     json_resp = response.json()
     assert json_resp["Count"] == 3
-    assert json_resp["_link"] == "http://testserver/home/my_user/otherstuff/foo/"
+    assert json_resp["link"] == "http://testserver/home/my_user/otherstuff/foo/"
 
 
 def test_retrieve_file():
