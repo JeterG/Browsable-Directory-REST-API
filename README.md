@@ -108,7 +108,7 @@ INFO:     Application startup complete.
  </details>
 
 ### Request Script
-Once the server is live and running on the docker image, can start making requests to the api, there is another script with some requests that can be ran as well with:
+Once the server is live and running on the docker image, can start making requests to the api, there is another script with some requests that can be ran as well  by running the following on a different shell instance:
 ```py
 python3 curling_script.py
 ```
