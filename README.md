@@ -6,6 +6,7 @@ In this api you can
 - Create new files and directories
 - Update files by overwritting them or extending them
 - delete files and directories
+### Documentation
 [Swagger Documentation](https://jeterg.github.io/Browsable-Directory-RESTapi/)
 ### Application Architecture
 The main additions necessary are Python, Docker 
@@ -14,7 +15,6 @@ Note: This was developed on a linux machine.
 1 - Install Python:
  ```
  sudo apt-get install python3.8
- 
  ```
 2 - [Install Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 
