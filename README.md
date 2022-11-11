@@ -116,8 +116,8 @@ python3 curling_script.py
 <details>
 
 <summary>It will make the requests using curl and print the curl command and the json_content response</summary>
-```py
 
+```py
 
 COMMAND:  curl -s 127.0.0.1:8000
 {
