@@ -7,7 +7,10 @@ In this api you can
 - Update files by overwritting them or extending them
 - delete files and directories
 ### Documentation
-[Swagger Documentation](https://jeterg.github.io/Browsable-Directory-RESTapi/)
+Static Swagger Documentation with endpoint and response schemas breakdowns can be found [here](https://jeterg.github.io/Browsable-Directory-RESTapi/), although currently the `try it out` will not work.
+When the api is running with docker the interactive documentatoin  will be available at:
+- [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc) 
 ### Application Architecture
 The main additions necessary are Python, Docker 
 Note: This was developed on a linux machine.
@@ -20,11 +23,11 @@ Note: This was developed on a linux machine.
 
 ### Building, and Running
 
-The `ROOT_DIRECTORY` can be specified on each docker run. In order to deploy the docker image that will be hosting the restapi, you can run `startup_script.py` with:
+The `ROOT_DIRECTORY` can be specified on each docker run. In order to deploy the docker image that will be hosting the restapi, you can run `startup_script.py` with replacing root_directory and in the commandline:
  ```py
  ROOT_DIRECTORY=`{root_directory}` python3 startup_script.py
  ```
- IE:
+ Example:
  ```py
 ROOT_DIRECTORY="/home/my_user/otherstuff/foo/" python3 script.py
  ```
