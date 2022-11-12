@@ -11,11 +11,15 @@ main_route = "/{specified_path:path}"
 tags_metadata = [
     {
         "name": "default",
-        "description": "Browsable Directory RESTapi that can be used to list/create/update/delete files and directories!",
+        "description": "Endpoints!",
     }
 ]
 
-app = FastAPI(version="0.0.1", openapi_tags=tags_metadata)
+app = FastAPI(
+    version="0.0.1",
+    openapi_tags=tags_metadata,
+    description="Browsable Directory RESTapi that can be used to list/create/update/delete files and directories!",
+)
 
 
 @app.get(
