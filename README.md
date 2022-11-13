@@ -29,7 +29,7 @@ The `ROOT_DIRECTORY` can be specified on each docker run. In order to deploy the
  ```
  Example:
  ```py
-ROOT_DIRECTORY="/home/my_user/otherstuff/foo/" python3 script.py
+ROOT_DIRECTORY="/home/my_user/otherstuff/foo/" python3 startup_script.py
  ```
  <details>
  
